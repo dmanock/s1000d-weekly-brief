@@ -7,15 +7,15 @@ calls Claude to curate and summarize, then generates a self-contained index.html
 for GitHub Pages.
 
 Run by GitHub Actions every Monday at 12:00 UTC (7:00 AM CDT).
-Requires: pip install anthropic
-Env vars: ANTHROPIC_API_KEY
+Requires: pip install openai
+Env vars: OPENROUTER_API_KEY
 """
 
 import os, re, json, datetime, time
 import xml.etree.ElementTree as ET
 from urllib.request import urlopen, Request
 from urllib.error import URLError
-import anthropic
+from openai import OpenAI
 
 # ── Date helpers ───────────────────────────────────────────────────────────────
 TODAY     = datetime.date.today()
@@ -60,7 +60,7 @@ def fetch_rss(url, limit=12):
                     continue
                 date_fmt = d.strftime("%b %d, %Y")
             except Exception:
-                date_fmt = TODAY.strftime("%b %d, %Y")
+                date_fmt = TODAY,strftime("%b %d, %Y")
             if title and link:
                 items.append({"title": title, "url": link,
                                "description": desc, "date": date_fmt})
@@ -131,7 +131,10 @@ def gather_data():
 
 # ── Claude curation ────────────────────────────────────────────────────────────
 def call_claude(raw_items, issue_number):
-    client = anthropic.Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
+    client = OpenAI(
+        base_url="https://openrouter.ai/api/v1",
+        api_key=os.environ["OPENROUTER_API_KEY"],
+    )
 
     prompt = f"""You are generating Issue #{issue_number} of the S1000D Weekly Brief, dated {TODAY_STR}.
 This is a curated newsletter for technical documentation practitioners in aerospace, defense, oil & gas, and manufacturing who work with the S1000D specification.
@@ -163,13 +166,13 @@ Return ONLY valid JSON (no markdown fences):
 
 color_class must be one of: event-spec, event-news, event-tools, event-events"""
 
-    print("Calling Claude API (haiku)...")
-    msg = client.messages.create(
-        model="claude-haiku-4-5-20251001",
+    print("Calling OpenRouter API (nvidia/nemotron-3-super-120b-a12b)...")
+    msg = client.chat.completions.create(
+        model="nvidia/nemotron-3-super-120b-a12b:free",
         max_tokens=4096,
         messages=[{"role": "user", "content": prompt}]
     )
-    text = msg.content[0].text.strip()
+    text = msg.choices[0].message.content.strip()
     # Strip accidental markdown fences
     text = re.sub(r"^```[a-z]*\s*", "", text, flags=re.MULTILINE)
     text = re.sub(r"\s*```$", "", text, flags=re.MULTILINE)
