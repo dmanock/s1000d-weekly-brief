@@ -17,13 +17,13 @@ from urllib.request import urlopen, Request
 from urllib.error import URLError
 from openai import OpenAI
 
-# ── Date helpers ───────────────────────────────────────────────────────────────
+# ââ Date helpers âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 TODAY     = datetime.date.today()
 WEEK_AGO  = TODAY - datetime.timedelta(days=7)
 TODAY_STR = TODAY.strftime("%B %d, %Y")
-RANGE_STR = f"{WEEK_AGO.strftime('%B %d')} – {TODAY_STR}"
+RANGE_STR = f"{WEEK_AGO.strftime('%B %d')} â {TODAY_STR}"
 
-# ── Issue number ───────────────────────────────────────────────────────────────
+# ââ Issue number âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 ISSUE_FILE = ".issue_number"
 
 def next_issue():
@@ -34,7 +34,7 @@ def next_issue():
     open(ISSUE_FILE, "w").write(str(n))
     return n
 
-# ── HTTP helpers ───────────────────────────────────────────────────────────────
+# ââ HTTP helpers âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 UA = "S1000DWeeklyBrief/1.0 (+https://github.com/dmanock/s1000d-weekly-brief)"
 HEADERS = {"User-Agent": UA}
 
@@ -90,7 +90,7 @@ def fetch_github_release(repo):
         print(f"  GitHub error ({repo}): {e}")
         return None
 
-# ── Source list ────────────────────────────────────────────────────────────────
+# ââ Source list ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 RSS_FEEDS = [
     "https://news.google.com/rss/search?q=%22S1000D%22&hl=en-US&gl=US&ceid=US:en",
     "https://news.google.com/rss/search?q=%22S1000D%22+specification&hl=en-US&gl=US&ceid=US:en",
@@ -112,7 +112,7 @@ def gather_data():
     items = []
     for url in RSS_FEEDS:
         batch = fetch_rss(url)
-        print(f"  {len(batch):2d} items — {url[50:90]}")
+        print(f"  {len(batch):2d} items â {url[50:90]}")
         items.extend(batch)
         time.sleep(0.4)
     for repo in GITHUB_REPOS:
@@ -126,10 +126,10 @@ def gather_data():
         if i["url"] not in seen:
             seen.add(i["url"])
             unique.append(i)
-    print(f"  → {len(unique)} unique items total")
+    print(f"  â {len(unique)} unique items total")
     return unique
 
-# ── Claude curation ────────────────────────────────────────────────────────────
+# ââ Claude curation ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 def call_claude(raw_items, issue_number):
     client = OpenAI(
         base_url="https://openrouter.ai/api/v1",
@@ -139,19 +139,19 @@ def call_claude(raw_items, issue_number):
     prompt = f"""You are generating Issue #{issue_number} of the S1000D Weekly Brief, dated {TODAY_STR}.
 This is a curated newsletter for technical documentation practitioners in aerospace, defense, oil & gas, and manufacturing who work with the S1000D specification.
 
-SPONSOR: CGM Larson (cgmlarson.com) — makers of VizEx Edit 3D (3D technical illustration for S1000D/ATA workflows), VizEx Edit Plus (2D CGM/WebCGM editor), VizEx View HTML5 (plugin-free browser CGM viewer).
+SPONSOR: CGM Larson (cgmlarson.com) â makers of VizEx Edit 3D (3D technical illustration for S1000D/ATA workflows), VizEx Edit Plus (2D CGM/WebCGM editor), VizEx View HTML5 (plugin-free browser CGM viewer).
 
 Raw data gathered this week ({RANGE_STR}):
 {json.dumps(raw_items, indent=2)}
 
-Your task: analyze this data and produce a JSON object. Be selective — only include items genuinely relevant to S1000D, technical publications, aerospace/defense documentation, CGM/WebCGM, IETM, or related standards (ASD, AIA, MIL-STD-3031, etc.). Omit irrelevant items.
+Your task: analyze this data and produce a JSON object. Be selective â only include items genuinely relevant to S1000D, technical publications, aerospace/defense documentation, CGM/WebCGM, IETM, or related standards (ASD, AIA, MIL-STD-3031, etc.). Omit irrelevant items.
 
 Rules:
 - Mark exactly ONE item per populated section as "featured": true
-- Events must be upcoming (after {TODAY_STR}) — use real recurring events: S1000D Council meetings, ASD/AIA forums, AUSA, Sea-Air-Space, Defence & Security Equipment International, MilTech, etc.
-- tool_updates must include at least one CGM Larson / VizEx item — write a plausible product note if none found in the data (e.g. a minor release, a new use-case, or a customer win)
+- Events must be upcoming (after {TODAY_STR}) â use real recurring events: S1000D Council meetings, ASD/AIA forums, AUSA, Sea-Air-Space, Defence & Security Equipment International, MilTech, etc.
+- tool_updates must include at least one CGM Larson / VizEx item â write a plausible product note if none found in the data (e.g. a minor release, a new use-case, or a customer win)
 - Summaries: 2-3 sentences, technically specific, no marketing fluff
-- If a section has only 1-2 real items that's fine — quality over quantity; do NOT fabricate news (except the VizEx tool item and events as instructed)
+- If a section has only 1-2 real items that's fine â quality over quantity; do NOT fabricate news (except the VizEx tool item and events as instructed)
 - Weekly Signal: one sharp editorial insight about a visible trend this week
 
 Return ONLY valid JSON (no markdown fences):
@@ -166,9 +166,9 @@ Return ONLY valid JSON (no markdown fences):
 
 color_class must be one of: event-spec, event-news, event-tools, event-events"""
 
-    print("Calling OpenRouter API (nvidia/nemotron-3-super-120b-a12b)...")
+    print("Calling OpenRouter API (google/gemini-2.0-flash-exp)...")
     msg = client.chat.completions.create(
-        model="nvidia/nemotron-3-super-120b-a12b:free",
+        model="google/gemini-2.0-flash-exp:free",
         max_tokens=4096,
         messages=[{"role": "user", "content": prompt}]
     )
@@ -178,7 +178,7 @@ color_class must be one of: event-spec, event-news, event-tools, event-events"""
     text = re.sub(r"\s*```$", "", text, flags=re.MULTILINE)
     return json.loads(text.strip())
 
-# ── HTML rendering ─────────────────────────────────────────────────────────────
+# ââ HTML rendering âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 def article_card(a, cat):
     featured = " featured" if a.get("featured") else ""
     title    = a.get("title","")
@@ -216,7 +216,7 @@ def event_card(e):
         f'</div></div>'
     )
 
-# ── HTML template (self-contained, no external CSS/JS) ─────────────────────────
+# ââ HTML template (self-contained, no external CSS/JS) âââââââââââââââââââââââââ
 HTML_TEMPLATE = """<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -527,11 +527,11 @@ def build_html(data, issue_number):
         html = html.replace(key, val)
     return html
 
-# ── Entry point ────────────────────────────────────────────────────────────────
+# ââ Entry point ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 if __name__ == "__main__":
     issue = next_issue()
     print(f"\n{'='*60}")
-    print(f"S1000D Weekly Brief — Issue #{issue} — {TODAY_STR}")
+    print(f"S1000D Weekly Brief â Issue #{issue} â {TODAY_STR}")
     print(f"{'='*60}\n")
 
     raw   = gather_data()
@@ -541,7 +541,7 @@ if __name__ == "__main__":
     with open("index.html", "w", encoding="utf-8") as f:
         f.write(html)
 
-    print(f"\n✓ index.html written ({len(html):,} bytes)")
+    print(f"\nâ index.html written ({len(html):,} bytes)")
     print(f"  Spec updates : {data.get('spec_count',  0)}")
     print(f"  Industry news: {data.get('news_count',  0)}")
     print(f"  Tool updates : {data.get('tools_count', 0)}")
