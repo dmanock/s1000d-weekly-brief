@@ -17,13 +17,13 @@ from urllib.request import urlopen, Request
 from urllib.error import URLError
 from openai import OpenAI
 
-# Ã¢ÂÂÃ¢ÂÂ Date helpers Ã¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂ
+# ── Date helpers ───────────────────────────────────────────────────────────────
 TODAY     = datetime.date.today()
 WEEK_AGO  = TODAY - datetime.timedelta(days=7)
 TODAY_STR = TODAY.strftime("%B %d, %Y")
-RANGE_STR = f"{WEEK_AGO.strftime('%B %d')} Ã¢ÂÂ {TODAY_STR}"
+RANGE_STR = f"{WEEK_AGO.strftime('%B %d')} – {TODAY_STR}"
 
-# Ã¢ÂÂÃ¢ÂÂ Issue number Ã¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂ
+# ── Issue number ───────────────────────────────────────────────────────────────
 ISSUE_FILE = ".issue_number"
 
 def next_issue():
@@ -34,7 +34,7 @@ def next_issue():
     open(ISSUE_FILE, "w").write(str(n))
     return n
 
-# Ã¢ÂÂÃ¢ÂÂ HTTP helpers Ã¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂ
+# ── HTTP helpers ───────────────────────────────────────────────────────────────
 UA = "S1000DWeeklyBrief/1.0 (+https://github.com/dmanock/s1000d-weekly-brief)"
 HEADERS = {"User-Agent": UA}
 
@@ -90,7 +90,7 @@ def fetch_github_release(repo):
         print(f"  GitHub error ({repo}): {e}")
         return None
 
-# Ã¢ÂÂÃ¢ÂÂ Source list Ã¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂ
+# ── Source list ────────────────────────────────────────────────────────────────
 RSS_FEEDS = [
     "https://news.google.com/rss/search?q=%22S1000D%22&hl=en-US&gl=US&ceid=US:en",
     "https://news.google.com/rss/search?q=%22S1000D%22+specification&hl=en-US&gl=US&ceid=US:en",
@@ -112,7 +112,7 @@ def gather_data():
     items = []
     for url in RSS_FEEDS:
         batch = fetch_rss(url)
-        print(f"  {len(batch):2d} items Ã¢ÂÂ {url[50:90]}")
+        print(f"  {len(batch):2d} items — {url[50:90]}")
         items.extend(batch)
         time.sleep(0.4)
     for repo in GITHUB_REPOS:
@@ -126,10 +126,10 @@ def gather_data():
         if i["url"] not in seen:
             seen.add(i["url"])
             unique.append(i)
-    print(f"  Ã¢ÂÂ {len(unique)} unique items total")
+    print(f"  → {len(unique)} unique items total")
     return unique
 
-# Ã¢ÂÂÃ¢ÂÂ Claude curation Ã¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂ
+# ── Claude curation ────────────────────────────────────────────────────────────
 def call_claude(raw_items, issue_number):
     client = OpenAI(
         base_url="https://openrouter.ai/api/v1",
@@ -139,19 +139,19 @@ def call_claude(raw_items, issue_number):
     prompt = f"""You are generating Issue #{issue_number} of the S1000D Weekly Brief, dated {TODAY_STR}.
 This is a curated newsletter for technical documentation practitioners in aerospace, defense, oil & gas, and manufacturing who work with the S1000D specification.
 
-SPONSOR: CGM Larson (cgmlarson.com) Ã¢ÂÂ makers of VizEx Edit 3D (3D technical illustration for S1000D/ATA workflows), VizEx Edit Plus (2D CGM/WebCGM editor), VizEx View HTML5 (plugin-free browser CGM viewer).
+SPONSOR: CGM Larson (cgmlarson.com) — makers of VizEx Edit 3D (3D technical illustration for S1000D/ATA workflows), VizEx Edit Plus (2D CGM/WebCGM editor), VizEx View HTML5 (plugin-free browser CGM viewer).
 
 Raw data gathered this week ({RANGE_STR}):
 {json.dumps(raw_items, indent=2)}
 
-Your task: analyze this data and produce a JSON object. Be selective Ã¢ÂÂ only include items genuinely relevant to S1000D, technical publications, aerospace/defense documentation, CGM/WebCGM, IETM, or related standards (ASD, AIA, MIL-STD-3031, etc.). Omit irrelevant items.
+Your task: analyze this data and produce a JSON object. Be selective — only include items genuinely relevant to S1000D, technical publications, aerospace/defense documentation, CGM/WebCGM, IETM, or related standards (ASD, AIA, MIL-STD-3031, etc.). Omit irrelevant items.
 
 Rules:
 - Mark exactly ONE item per populated section as "featured": true
-- Events must be upcoming (after {TODAY_STR}) Ã¢ÂÂ use real recurring events: S1000D Council meetings, ASD/AIA forums, AUSA, Sea-Air-Space, Defence & Security Equipment International, MilTech, etc.
-- tool_updates must include at least one CGM Larson / VizEx item Ã¢ÂÂ write a plausible product note if none found in the data (e.g. a minor release, a new use-case, or a customer win)
+- Events must be upcoming (after {TODAY_STR}) — use real recurring events: S1000D Council meetings, ASD/AIA forums, AUSA, Sea-Air-Space, Defence & Security Equipment International, MilTech, etc.
+- tool_updates must include at least one CGM Larson / VizEx item — write a plausible product note if none found in the data (e.g. a minor release, a new use-case, or a customer win)
 - Summaries: 2-3 sentences, technically specific, no marketing fluff
-- If a section has only 1-2 real items that's fine Ã¢ÂÂ quality over quantity; do NOT fabricate news (except the VizEx tool item and events as instructed)
+- If a section has only 1-2 real items that's fine — quality over quantity; do NOT fabricate news (except the VizEx tool item and events as instructed)
 - Weekly Signal: one sharp editorial insight about a visible trend this week
 
 Return ONLY valid JSON (no markdown fences):
@@ -166,19 +166,30 @@ Return ONLY valid JSON (no markdown fences):
 
 color_class must be one of: event-spec, event-news, event-tools, event-events"""
 
-    print("Calling OpenRouter API (meta-llama/llama-3.3-70b-instruct)...")
-    msg = client.chat.completions.create(
-        model="meta-llama/llama-3.3-70b-instruct:free",
-        max_tokens=4096,
-        messages=[{"role": "user", "content": prompt}]
-    )
+    model = "meta-llama/llama-3.3-70b-instruct:free"
+    print(f"Calling OpenRouter API ({model})...")
+    for attempt in range(1, 6):
+        try:
+            msg = client.chat.completions.create(
+                model=model,
+                max_tokens=4096,
+                messages=[{"role": "user", "content": prompt}]
+            )
+            break
+        except Exception as e:
+            if "429" in str(e) and attempt < 5:
+                wait = 15 * attempt
+                print(f"Rate limited (attempt {attempt}/5) — retrying in {wait}s...")
+                time.sleep(wait)
+            else:
+                raise
     text = msg.choices[0].message.content.strip()
     # Strip accidental markdown fences
     text = re.sub(r"^```[a-z]*\s*", "", text, flags=re.MULTILINE)
     text = re.sub(r"\s*```$", "", text, flags=re.MULTILINE)
     return json.loads(text.strip())
 
-# Ã¢ÂÂÃ¢ÂÂ HTML rendering Ã¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂ
+# ── HTML rendering ─────────────────────────────────────────────────────────────
 def article_card(a, cat):
     featured = " featured" if a.get("featured") else ""
     title    = a.get("title","")
@@ -216,7 +227,7 @@ def event_card(e):
         f'</div></div>'
     )
 
-# Ã¢ÂÂÃ¢ÂÂ HTML template (self-contained, no external CSS/JS) Ã¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂ
+# ── HTML template (self-contained, no external CSS/JS) ─────────────────────────
 HTML_TEMPLATE = """<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -527,11 +538,11 @@ def build_html(data, issue_number):
         html = html.replace(key, val)
     return html
 
-# Ã¢ÂÂÃ¢ÂÂ Entry point Ã¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂ
+# ── Entry point ────────────────────────────────────────────────────────────────
 if __name__ == "__main__":
     issue = next_issue()
     print(f"\n{'='*60}")
-    print(f"S1000D Weekly Brief Ã¢ÂÂ Issue #{issue} Ã¢ÂÂ {TODAY_STR}")
+    print(f"S1000D Weekly Brief — Issue #{issue} — {TODAY_STR}")
     print(f"{'='*60}\n")
 
     raw   = gather_data()
@@ -541,7 +552,7 @@ if __name__ == "__main__":
     with open("index.html", "w", encoding="utf-8") as f:
         f.write(html)
 
-    print(f"\nÃ¢ÂÂ index.html written ({len(html):,} bytes)")
+    print(f"\n✓ index.html written ({len(html):,} bytes)")
     print(f"  Spec updates : {data.get('spec_count',  0)}")
     print(f"  Industry news: {data.get('news_count',  0)}")
     print(f"  Tool updates : {data.get('tools_count', 0)}")
